@@ -1,0 +1,22 @@
+spring:
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        password: postgres
+        username: postgres
+        url: jdbc:postgresql://192.168.0.12:5432/postgres
+    jpa:
+        hibernate:
+            ddl-auto: create
+
+ftp:
+    host: 192.168.0.12
+    user: demo
+    pass: mysecretpassword123
+    port: 21
+    remote:
+        directory: "/home/demo"
+
+logging:
+    level:
+        org.springframework: ERROR
+        com.example: DEBUG
