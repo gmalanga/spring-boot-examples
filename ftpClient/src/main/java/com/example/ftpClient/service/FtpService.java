@@ -26,11 +26,13 @@ public class FtpService {
     public void sendFile(Map<String, Object> data) {
         try {
             File file = csvFileGenerator.createFile(data);
-            uploadGateway.sendToFtp(file);
+            uploadGateway.upload(file);
             log.info("File {} successfully uploaded to remote ftp server.", file.getName());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw e;
+        } finally {
+            csvFileGenerator.eraseFile();
         }
     }
 

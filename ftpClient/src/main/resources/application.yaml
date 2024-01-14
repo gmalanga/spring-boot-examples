@@ -13,6 +13,8 @@ ftp:
     user: demo
     pass: mysecretpassword123
     port: 21
+    client:
+        mode: 2 #ACTIVE_LOCAL_DATA_CONNECTION_MODE = 0, PASSIVE_LOCAL_DATA_CONNECTION_MODE = 2
     remote:
         directory: "/home/demo"
 

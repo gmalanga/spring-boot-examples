@@ -5,17 +5,17 @@ import org.apache.commons.net.ftp.FTPFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.expression.common.LiteralExpression;
 import org.springframework.integration.annotation.InboundChannelAdapter;
 import org.springframework.integration.annotation.Poller;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.core.MessageSource;
-import org.springframework.integration.file.FileNameGenerator;
 import org.springframework.integration.file.filters.AcceptOnceFileListFilter;
 import org.springframework.integration.file.remote.session.CachingSessionFactory;
 import org.springframework.integration.file.remote.session.SessionFactory;
+import org.springframework.integration.ftp.gateway.FtpOutboundGateway;
 import org.springframework.integration.ftp.inbound.FtpInboundFileSynchronizer;
 import org.springframework.integration.ftp.inbound.FtpInboundFileSynchronizingMessageSource;
-import org.springframework.integration.ftp.outbound.FtpMessageHandler;
 import org.springframework.integration.ftp.session.DefaultFtpSessionFactory;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
@@ -39,6 +39,9 @@ public class FtpConfiguration {
     @Value("${ftp.port}")
     private int port;
 
+    @Value("${ftp.client.mode}")
+    private int ftpClientMode;
+
     @Value("${ftp.remote.directory}")
     private String ftpRemoteDirectory;
 
@@ -49,6 +52,7 @@ public class FtpConfiguration {
         factory.setPort(port);
         factory.setUsername(user);
         factory.setPassword(pass);
+        factory.setClientMode(ftpClientMode);
         return new CachingSessionFactory<FTPFile>(factory);
     }
 
@@ -61,7 +65,7 @@ public class FtpConfiguration {
     }
 
     @Bean
-    @InboundChannelAdapter(channel = "ftpChannel", poller = @Poller(fixedDelay = "5000"))
+    @InboundChannelAdapter(channel = "fromFtpChannel", poller = @Poller(fixedDelay = "5000"))
     public MessageSource<File> ftpMessageSource() {
         FtpInboundFileSynchronizingMessageSource source =
                 new FtpInboundFileSynchronizingMessageSource(ftpInboundFileSynchronizer());
@@ -73,8 +77,8 @@ public class FtpConfiguration {
     }
 
     @Bean
-    @ServiceActivator(inputChannel = "ftpChannel")
-    public MessageHandler handler() {
+    @ServiceActivator(inputChannel = "fromFtpChannel")
+    public MessageHandler handlerFrom() {
         return new MessageHandler() {
 
             @Override
@@ -86,17 +90,11 @@ public class FtpConfiguration {
 
     @Bean
     @ServiceActivator(inputChannel = "toFtpChannel")
-    public MessageHandler puthandler() {
-        FtpMessageHandler handler = new FtpMessageHandler(ftpSessionFactory());
-        handler.setRemoteDirectoryExpressionString("headers['remote-target-dir']");
-        handler.setFileNameGenerator(new FileNameGenerator() {
-
-            @Override
-            public String generateFileName(Message<?> message) {
-                return "handlerContent.test";
-            }
-
-        });
-        return handler;
+    public MessageHandler handler() {
+        FtpOutboundGateway ftpOutboundGateway =
+                new FtpOutboundGateway(ftpSessionFactory(), "put", null);
+//        ftpOutboundGateway.setOutputChannelName("lsReplyChannel");
+        ftpOutboundGateway.setRemoteDirectoryExpression(new LiteralExpression(ftpRemoteDirectory));
+        return ftpOutboundGateway;
     }
 }

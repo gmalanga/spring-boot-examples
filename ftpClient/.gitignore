@@ -34,3 +34,4 @@ build/
 
 ### CSV
 *.csv
+ftp-inbound
