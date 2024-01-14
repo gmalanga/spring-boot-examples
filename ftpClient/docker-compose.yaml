@@ -18,13 +18,6 @@ services:
     environment:
       - USERS=demo|mysecretpassword123|/home/demo
       - ADDRESS=192.168.0.12
-#    image: garethflowers/ftp-server
-#    ports:
-#      - '20-21:20-21/tcp'
-#      - '21000-21010:21000-21010/tcp'
-#    environment:
-#      - FTP_PASS=mysecretpassword123
-#      - FTP_USER=demo
     volumes:
       - ftp:/home/demo
 volumes:

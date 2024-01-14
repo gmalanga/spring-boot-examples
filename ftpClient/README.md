@@ -2,6 +2,13 @@
 
 ## How to run the application
 
+Generate your own certificate using this command:
+```shell
+
+openssl req -x509 -nodes -days 7300 -newkey rsa:2048 -keyout vsftpd.pem -out vsftpd.pem
+```
+
+
 1. Run the containers
 ```shell
 docker-compose up -d

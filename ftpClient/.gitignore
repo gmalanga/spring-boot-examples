@@ -32,6 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
-### CSV
+### CSV ###
 *.csv
 ftp-inbound
+
+### PEM certificate ###
+*.pem
