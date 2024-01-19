@@ -45,6 +45,9 @@ public class FtpConfiguration {
     @Value("${ftp.remote.directory}")
     private String ftpRemoteDirectory;
 
+    @Value("${ftp.local.directory}")
+    private String ftpLocalDirectory;
+
     @Bean
     public SessionFactory<FTPFile> ftpSessionFactory() {
         DefaultFtpSessionFactory factory = new DefaultFtpSessionFactory();
@@ -53,7 +56,7 @@ public class FtpConfiguration {
         factory.setUsername(user);
         factory.setPassword(pass);
         factory.setClientMode(ftpClientMode);
-        return new CachingSessionFactory<FTPFile>(factory);
+        return new CachingSessionFactory<>(factory);
     }
 
     @Bean
@@ -69,7 +72,7 @@ public class FtpConfiguration {
     public MessageSource<File> ftpMessageSource() {
         FtpInboundFileSynchronizingMessageSource source =
                 new FtpInboundFileSynchronizingMessageSource(ftpInboundFileSynchronizer());
-        source.setLocalDirectory(new File("ftp-inbound"));
+        source.setLocalDirectory(new File(ftpLocalDirectory));
         source.setAutoCreateLocalDirectory(true);
         source.setLocalFilter(new AcceptOnceFileListFilter<File>());
         source.setMaxFetchSize(1);

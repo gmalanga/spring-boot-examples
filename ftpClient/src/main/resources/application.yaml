@@ -17,6 +17,8 @@ ftp:
         mode: 2 #ACTIVE_LOCAL_DATA_CONNECTION_MODE = 0, PASSIVE_LOCAL_DATA_CONNECTION_MODE = 2
     remote:
         directory: "/home/demo"
+    local:
+        directory: "src/main/resources/ftp-inbound"
 
 logging:
     level:
