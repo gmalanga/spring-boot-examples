@@ -1,7 +1,6 @@
 package com.example.kafkastreams.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StoreQueryParameters;
@@ -23,7 +22,7 @@ public class WordCountRestService {
     public Long getCount(@PathVariable String word) {
         final KafkaStreams kafkaStreams = factoryBean.getKafkaStreams();
 
-        if(kafkaStreams != null) {
+        if (kafkaStreams != null) {
             log.info("KafkaStream state: {}", kafkaStreams.state().name());
             final ReadOnlyKeyValueStore<String, Long> counts = kafkaStreams.store(StoreQueryParameters.fromNameAndType("counts", QueryableStoreTypes.keyValueStore()));
             return counts.get(word);

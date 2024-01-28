@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class Consumer {
 
-    @KafkaListener(topics = {"hobbit"}, groupId = "spring-boot-streams")
-    public void consume(ConsumerRecord<String, String> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
-        log.info("topic: {}, key: {} - message= {}", topic, record.key(), record.value());
+    @KafkaListener(topics = {"hobbit"}, groupId = "demo-hobbit")
+    public void consume(ConsumerRecord<Integer, String> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+        log.info("topic: {}, key: {} - message: {}", topic, record.key(), record.value());
     }
 }

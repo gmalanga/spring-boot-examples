@@ -31,7 +31,9 @@ public class Producer {
         final Flux<String> quotes = Flux.fromStream(Stream.generate(() -> faker.hobbit().quote()));
 
         Flux.zip(interval, quotes)
-                .map(it -> template.send(new ProducerRecord<String, String>("hobbit", it.getT1().toString(), it.getT2())))
+                .map(it -> template.send(
+                        new ProducerRecord<String, String>("hobbit", it.getT1().toString(), it.getT2())
+                ))
                 .doOnError(error -> log.error("Error: ", error))
                 .blockLast();
     }
