@@ -32,7 +32,7 @@ public class Producer {
 
         Flux.zip(interval, quotes)
                 .map(it -> template.send(
-                        new ProducerRecord<String, String>("hobbit", it.getT1().toString(), it.getT2())
+                        new ProducerRecord<String, String>("hobbit", String.valueOf(faker.random().nextInt(42)), it.getT2())
                 ))
                 .doOnError(error -> log.error("Error: ", error))
                 .blockLast();

@@ -14,7 +14,12 @@ import org.springframework.stereotype.Component;
 public class Consumer {
 
     @KafkaListener(topics = {"hobbit"}, groupId = "demo-hobbit")
-    public void consume(ConsumerRecord<Integer, String> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+    public void consumerOne(ConsumerRecord<Integer, String> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+        log.info("topic: {}, key: {} - message: {}", topic, record.key(), record.value());
+    }
+
+    @KafkaListener(topics = {"streams-wordcount-output"}, groupId = "demo-word-count")
+    public void consumerTwo(ConsumerRecord<Integer, String> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         log.info("topic: {}, key: {} - message: {}", topic, record.key(), record.value());
     }
 }
