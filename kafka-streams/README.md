@@ -12,8 +12,8 @@
    ```
 3. Check the health - http://localhost:8080/actuator/health/
 
-4. Run the example
+4. Run the example of counting the number of occurrences for a given world
    ```shell
-   curl -v http://localhost:8080/count/hello%20world
+   curl -v http://localhost:8080/count/he
    ```
 

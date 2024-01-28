@@ -24,7 +24,7 @@ public class KafkaConfig {
     NewTopic counts() {
 
         return TopicBuilder
-                .name("streams-wordcount-output")
+                .name("wordcount-output")
                 .partitions(6)
                 .replicas(3)
                 .build();
