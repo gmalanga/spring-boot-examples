@@ -16,3 +16,9 @@ management:
   health:
     binders:
       enabled: true
+
+logging:
+  level:
+    root: INFO
+    org.apache.kafka: ERROR
+    com.example.kafkastreams: DEBUG
