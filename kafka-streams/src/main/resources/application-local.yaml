@@ -1,0 +1,18 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  kafka:
+    bootstrap-servers: localhost:9093
+    group-id:
+      config: spring-boot-streams
+    streams:
+      application-id: spring-boot-streams
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  health:
+    binders:
+      enabled: true
