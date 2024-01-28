@@ -2,6 +2,6 @@ server:
   port: 8080
 spring:
   application:
-    name: spring-boot-streams
+    name: streams-app
   profiles:
     active: local

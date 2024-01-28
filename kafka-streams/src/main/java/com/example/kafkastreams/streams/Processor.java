@@ -5,6 +5,7 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -12,11 +13,16 @@ import java.util.Arrays;
 public @Component
 class Processor {
 
+    @Value(value = "${spring.kafka.topics.wordcount-output}")
+    private String wordCountOutputTopic;
+
+    @Value(value = "${spring.kafka.topics.wordcount-input}")
+    private String wordCountInputTopic;
+
     @Autowired
     public void process(StreamsBuilder builder) {
 
         // Serializers/deserializers (serde) for String and Long types
-        final Serde<Integer> integerSerde = Serdes.Integer();
         final Serde<String> stringSerde = Serdes.String();
         final Serde<Long> longSerde = Serdes.Long();
 
@@ -24,7 +30,7 @@ class Processor {
         // represent lines of text (for the sake of this example, we ignore whatever may be stored
         // in the message keys).
         KStream<String, String> textLines = builder
-                .stream("wordcount-input", Consumed.with(stringSerde, stringSerde));
+                .stream(wordCountInputTopic, Consumed.with(stringSerde, stringSerde));
 
         KTable<String, Long> wordCounts = textLines
                 // Split each text line, by whitespace, into words.  The text lines are the message
@@ -37,7 +43,7 @@ class Processor {
                 .count(Materialized.as("counts"));
 
         // Convert the `KTable<String, Long>` into a `KStream<String, Long>` and write to the output topic.
-        wordCounts.toStream().to("wordcount-output", Produced.with(stringSerde, longSerde));
+        wordCounts.toStream().to(wordCountOutputTopic, Produced.with(stringSerde, longSerde));
 
     }
 }

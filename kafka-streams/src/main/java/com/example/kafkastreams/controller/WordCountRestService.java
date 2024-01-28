@@ -28,6 +28,7 @@ public class WordCountRestService {
     public Long getCount(@PathVariable String word) {
         final KafkaStreams kafkaStreams = factoryBean.getKafkaStreams();
 
+        log.debug("KafkaStreams status = {}", kafkaStreams.state().toString());
         final ReadOnlyKeyValueStore<String, Long> counts = kafkaStreams
                 .store(
                         StoreQueryParameters

@@ -4,6 +4,7 @@ import com.github.javafaker.Faker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -20,6 +21,9 @@ public class Producer {
 
     private final KafkaTemplate<String, String> template;
 
+    @Value(value = "${spring.kafka.topics.wordcount-input}")
+    private String wordCountInputTopic;
+
     Faker faker;
 
     @EventListener(ApplicationStartedEvent.class)
@@ -32,7 +36,7 @@ public class Producer {
 
         Flux.zip(interval, quotes)
                 .map(it -> template.send(
-                        new ProducerRecord<String, String>("wordcount-input", String.valueOf(faker.random().nextInt(42)), it.getT2())
+                        new ProducerRecord<>(wordCountInputTopic, String.valueOf(faker.random().nextInt(42)), it.getT2())
                 ))
                 .doOnError(error -> log.error("Error: ", error))
                 .blockLast();

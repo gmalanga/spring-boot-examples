@@ -4,10 +4,14 @@ spring:
       on-profile: local
   kafka:
     bootstrap-servers: localhost:9093
-    group-id:
-      config: spring-boot-streams
+    consumer:
+      auto-offset-reset: earliest
+    topics:
+      wordcount-input: wordcount-input
+      wordcount-output: wordcount-output
+      hobbit: hobbit
     streams:
-      application-id: spring-boot-streams
+      application-id: streams-app
 
 management:
   endpoint:
