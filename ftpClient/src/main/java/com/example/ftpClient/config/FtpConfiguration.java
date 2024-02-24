@@ -74,7 +74,7 @@ public class FtpConfiguration {
                 new FtpInboundFileSynchronizingMessageSource(ftpInboundFileSynchronizer());
         source.setLocalDirectory(new File(ftpLocalDirectory));
         source.setAutoCreateLocalDirectory(true);
-        source.setLocalFilter(new AcceptOnceFileListFilter<File>());
+        source.setLocalFilter(new AcceptOnceFileListFilter<>());
         source.setMaxFetchSize(1);
         return source;
     }

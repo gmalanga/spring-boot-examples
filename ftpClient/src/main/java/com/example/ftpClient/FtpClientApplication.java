@@ -25,9 +25,9 @@ import java.util.List;
 public class FtpClientApplication {
 
     private static final List<Authority> ADMIN_AUTHORITIES;
-    public final static int MAX_CONCURRENT_LOGINS = 1;
-    public  final static int MAX_CONCURRENT_LOGINS_PER_IP = 1;
-    private static final String DEFAULT_USER_DIR = "src/main/resources/ftp/remote";
+    public static final int MAX_CONCURRENT_LOGINS = 1;
+    public static final int MAX_CONCURRENT_LOGINS_PER_IP = 1;
+    private static final String DEFAULT_USER_DIR = "src/main/resources/ftp2/remote";
 
     static {
         // Admin authorities
@@ -43,19 +43,7 @@ public class FtpClientApplication {
 
         // SSL/TLS Embedded server
         FtpServerFactory serverFactory = new FtpServerFactory();
-        ListenerFactory factory = new ListenerFactory();
-
-        // set the port of the listener
-        factory.setPort(990);
-
-        // define SSL configuration
-        SslConfigurationFactory ssl = new SslConfigurationFactory();
-        ssl.setKeystoreFile(new File("src/main/resources/ftp/certs/domain.jks"));
-        ssl.setKeystorePassword("password");
-
-        // set the SSL configuration for the listener
-        factory.setSslConfiguration(ssl.createSslConfiguration());
-        factory.setImplicitSsl(true);
+        ListenerFactory factory = getListenerFactory();
 
         PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
         UserManager userManager = userManagerFactory.createUserManager();
@@ -77,5 +65,22 @@ public class FtpClientApplication {
         // start the server
         FtpServer server = serverFactory.createServer();
         server.start();
+    }
+
+    private static ListenerFactory getListenerFactory() {
+        ListenerFactory factory = new ListenerFactory();
+
+        // set the port of the listener
+        factory.setPort(990);
+
+        // define SSL configuration
+        SslConfigurationFactory ssl = new SslConfigurationFactory();
+        ssl.setKeystoreFile(new File("src/main/resources/ftp2/certs/domain.jks"));
+        ssl.setKeystorePassword("password");
+
+        // set the SSL configuration for the listener
+        factory.setSslConfiguration(ssl.createSslConfiguration());
+        factory.setImplicitSsl(true);
+        return factory;
     }
 }
