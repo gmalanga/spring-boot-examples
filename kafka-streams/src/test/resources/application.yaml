@@ -1,0 +1,24 @@
+spring:
+  kafka:
+    bootstrap-servers: "PLAINTEXT://localhost:9085"
+    consumer:
+      auto-offset-reset: earliest
+    topics:
+      wordcount-input: wordcount-input
+      wordcount-output: wordcount-output
+      hobbit: hobbit
+    streams:
+      application-id: streams-app
+
+monitor:
+  kafka:
+    bootstrap:
+      config: "PLAINTEXT://localhost:9085"
+    consumer:
+      group-id: "demo-health"
+
+logging:
+  level:
+    root: INFO
+    org.apache.kafka: ERROR
+    com.example.kafkastreams: DEBUG
