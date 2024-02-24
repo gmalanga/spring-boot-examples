@@ -28,7 +28,7 @@ public class FtpController {
             log.error(e.getMessage(), e);
             return ResponseEntity.internalServerError().body("An error occurred while sending file to remote server.");
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body("File uploaded");
     }
 
     @GetMapping("/list")
@@ -38,6 +38,6 @@ public class FtpController {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body("Hello world");
     }
 }

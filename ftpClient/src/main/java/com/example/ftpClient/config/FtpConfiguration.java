@@ -83,7 +83,6 @@ public class FtpConfiguration {
     @ServiceActivator(inputChannel = "fromFtpChannel")
     public MessageHandler handlerFrom() {
         return new MessageHandler() {
-
             @Override
             public void handleMessage(Message<?> message) throws MessagingException {
                 log.info(message.getPayload().toString());

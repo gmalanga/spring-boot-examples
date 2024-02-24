@@ -37,6 +37,7 @@ public class FtpService {
     }
 
     public String listFile() {
-        return "";
+        //TODO Implement the list method
+        return "Hello world";
     }
 }

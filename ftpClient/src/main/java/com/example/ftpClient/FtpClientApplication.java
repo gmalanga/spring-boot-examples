@@ -6,6 +6,7 @@ import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.listener.ListenerFactory;
+import org.apache.ftpserver.ssl.SslConfigurationFactory;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 import org.apache.ftpserver.usermanager.impl.BaseUser;
 import org.apache.ftpserver.usermanager.impl.ConcurrentLoginPermission;
@@ -15,6 +16,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class FtpClientApplication {
     private static final List<Authority> ADMIN_AUTHORITIES;
     public final static int MAX_CONCURRENT_LOGINS = 1;
     public  final static int MAX_CONCURRENT_LOGINS_PER_IP = 1;
-    private static final String DEFAULT_USER_DIR = "src/main/resources/ftp-inbound";
+    private static final String DEFAULT_USER_DIR = "src/main/resources/ftp/remote";
 
     static {
         // Admin authorities
@@ -39,11 +41,21 @@ public class FtpClientApplication {
 
         SpringApplication.run(FtpClientApplication.class, args);
 
+        // SSL/TLS Embedded server
         FtpServerFactory serverFactory = new FtpServerFactory();
         ListenerFactory factory = new ListenerFactory();
 
         // set the port of the listener
-        factory.setPort(2221);
+        factory.setPort(990);
+
+        // define SSL configuration
+        SslConfigurationFactory ssl = new SslConfigurationFactory();
+        ssl.setKeystoreFile(new File("src/main/resources/ftp/certs/domain.jks"));
+        ssl.setKeystorePassword("password");
+
+        // set the SSL configuration for the listener
+        factory.setSslConfiguration(ssl.createSslConfiguration());
+        factory.setImplicitSsl(true);
 
         PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
         UserManager userManager = userManagerFactory.createUserManager();

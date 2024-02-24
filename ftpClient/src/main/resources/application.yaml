@@ -3,13 +3,13 @@ spring:
         driver-class-name: org.postgresql.Driver
         password: postgres
         username: postgres
-        url: jdbc:postgresql://192.168.0.12:5432/postgres
+        url: jdbc:postgresql://localhost:5432/postgres
     jpa:
         hibernate:
             ddl-auto: create
 
 ftp:
-    host: 192.168.0.12
+    host: localhost
     user: demo
     pass: mysecretpassword123
     port: 21
@@ -18,7 +18,7 @@ ftp:
     remote:
         directory: "/home/demo"
     local:
-        directory: "src/main/resources/ftp-inbound"
+        directory: "src/main/resources/ftp/local"
 
 logging:
     level:

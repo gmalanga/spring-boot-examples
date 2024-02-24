@@ -34,7 +34,8 @@ build/
 
 ### CSV ###
 *.csv
-src/main/resources/ftp-inbound
+src/main/resources/ftp/local
+src/main/resources/ftp/remote
 
 ### PEM certificate ###
 *.pem
