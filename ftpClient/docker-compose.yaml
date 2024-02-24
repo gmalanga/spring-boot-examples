@@ -11,6 +11,7 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
   ftp-server:
+    # https://github.com/delfer/docker-alpine-ftp-server
     image: delfer/alpine-ftp-server
     ports:
       - '20-21:20-21/tcp'
