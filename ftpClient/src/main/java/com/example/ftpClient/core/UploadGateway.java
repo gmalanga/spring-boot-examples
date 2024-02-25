@@ -14,4 +14,7 @@ public interface UploadGateway {
 
     @Gateway(requestChannel = "toFtpChannel")
     void sendToFtp(File file);
+
+    @Gateway(requestChannel = "toFtpsChannel")
+    void sendToFtps(File file);
 }

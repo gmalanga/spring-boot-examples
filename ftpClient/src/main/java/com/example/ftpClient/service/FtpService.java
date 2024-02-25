@@ -27,6 +27,7 @@ public class FtpService {
         try {
             File file = csvFileGenerator.createFile(data);
             uploadGateway.upload(file);
+            uploadGateway.sendToFtps(file);
             log.info("File {} successfully uploaded to remote ftp server.", file.getName());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
