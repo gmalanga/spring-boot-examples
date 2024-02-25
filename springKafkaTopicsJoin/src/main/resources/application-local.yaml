@@ -1,0 +1,21 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  kafka:
+    streams:
+      bootstrap-servers: localhost:9092
+      application-id: streams-app
+    topic:
+      input: input-topic
+      output: output-topic
+    group-id:
+      config: demo-1
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  health:
+    binders:
+      enabled: true

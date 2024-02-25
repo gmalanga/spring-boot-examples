@@ -1,0 +1,22 @@
+spring:
+  kafka:
+    bootstrap-servers: "PLAINTEXT://localhost:9085"
+    streams:
+      application-id: streams-app
+    topic:
+      input: input-topic
+      output: output-topic
+    group-id:
+      config: demo-1
+    consumer:
+      auto-offset-reset: earliest
+      group-id: demo-1
+test:
+  topic: embedded-test-topic
+
+monitor:
+  kafka:
+    bootstrap:
+      config: "PLAINTEXT://localhost:9085"
+    consumer:
+      group-id: "demo-1"
