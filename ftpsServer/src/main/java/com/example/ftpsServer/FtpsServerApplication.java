@@ -6,6 +6,7 @@ import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.listener.ListenerFactory;
+import org.apache.ftpserver.ssl.ClientAuth;
 import org.apache.ftpserver.ssl.SslConfigurationFactory;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 import org.apache.ftpserver.usermanager.impl.BaseUser;
@@ -38,7 +39,7 @@ public class FtpsServerApplication {
 	public static void main(String[] args) throws FtpException {
 		SpringApplication.run(FtpsServerApplication.class, args);
 
-		// SSL/TLS Embedded server
+		// FTPS Embedded server
 		FtpServerFactory serverFactory = new FtpServerFactory();
 		ListenerFactory factory = getListenerFactory();
 
@@ -68,12 +69,13 @@ public class FtpsServerApplication {
 		ListenerFactory factory = new ListenerFactory();
 
 		// set the port of the listener
-		factory.setPort(990);
+		factory.setPort(9900);
 
 		// define SSL configuration
 		SslConfigurationFactory ssl = new SslConfigurationFactory();
 		ssl.setKeystoreFile(new File("src/main/resources/ftps/certs/domain.jks"));
 		ssl.setKeystorePassword("password");
+		ssl.setClientAuthentication(String.valueOf(ClientAuth.WANT));
 
 		// set the SSL configuration for the listener
 		factory.setSslConfiguration(ssl.createSslConfiguration());

@@ -2,7 +2,7 @@
 
 Spring boot project with an embedded FTPS server using Apache Mina project - https://mina.apache.org/ftpserver-project/embedding_ftpserver.html
 
-## How to generate the SSL/TLS certificates
+## How to generate the SSL certificates
 
 1. Generate your own Self-Signed certificate using these commands:
 
