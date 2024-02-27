@@ -49,6 +49,10 @@ Spring boot project with an embedded FTPS server using Apache Mina project - htt
    curl -v -tlsv1.2 --cacert src/main/resources/ftps/certs/domain.crt \
       --cert src/main/resources/ftps/certs/domain.pem \
       --key src/main/resources/ftps/certs/client.key ftps://demo:secret1234@acme.ftp:9900/
+   # alternative option with password
+   curl -v -tlsv1.2 --cacert src/main/resources/ftps/certs/domain.crt \
+      --cert src/main/resources/ftps/certs/domain.pem:password \
+      --key src/main/resources/ftps/certs/domain.key ftps://demo:secret1234@acme.ftp:9900/
    
    # upload a new file to the remote directory
    curl -v -tlsv1.2 --cacert src/main/resources/ftps/certs/domain.crt \
