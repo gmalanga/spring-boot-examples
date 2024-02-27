@@ -20,9 +20,13 @@ Spring boot project with an embedded FTPS server using Apache Mina project - htt
     openssl x509 -req -CA rootCA.crt -CAkey rootCA.key -in domain.csr -out domain.crt -days 365 -CAcreateserial -extfile domain.ext
     # View Certificates
     openssl x509 -text -noout -in domain.crt
+    # Convert CRT to PEM
+    openssl x509 -in domain.crt -out domain.pem -outform PEM
+    # Generate client KEY with no password
+    openssl rsa -in domain.key -out client.key
     # Convert PEM to PKCS12
     openssl pkcs12 -inkey domain.key -in domain.crt -export -out domain.pfx
-    # Generate the JKS file
+    # Generate the JKS file for the server
     keytool -importkeystore -srckeystore domain.pfx -srcstoretype pkcs12 -srcalias 1 -srcstorepass password -destkeystore domain.jks -deststoretype jks -deststorepass password -destalias myalias
 
     ```
@@ -35,17 +39,22 @@ Spring boot project with an embedded FTPS server using Apache Mina project - htt
 
 ## How to run the project
 
-1. Start the FTPS server (it starts on port 990)
+1. Start the server (Spring boot app starts on port 9090, FTP server starts on port 9900)
    ```shell
    mvn clean spring-boot:run -Dspring.profiles.active=local
    ```
-2. CURL commands for the embedded FTPS server
+2. CURL commands to test the embedded FTPS server
    ```shell
    # list the remote directory
-   curl -v --cacert src/main/resources/ftps/certs/domain.crt ftps://demo:secret1234@acme.ftp:990/
+   curl -v -tlsv1.2 --cacert src/main/resources/ftps/certs/domain.crt \
+      --cert src/main/resources/ftps/certs/domain.pem \
+      --key src/main/resources/ftps/certs/client.key ftps://demo:secret1234@acme.ftp:9900/
    
    # upload a new file to the remote directory
-   curl -v --cacert src/main/resources/ftps/certs/domain.crt -T README.md ftps://demo:secret1234@acme.ftp:990/
+   curl -v -tlsv1.2 --cacert src/main/resources/ftps/certs/domain.crt \
+      --cert src/main/resources/ftps/certs/domain.pem \
+      --key src/main/resources/ftps/certs/client.key \
+      -T README.md ftps://demo:secret1234@acme.ftp:9900/
    ```
 
 

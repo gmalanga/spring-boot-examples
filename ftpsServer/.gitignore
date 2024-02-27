@@ -37,4 +37,13 @@ src/main/resources/ftps/local
 src/main/resources/ftps/remote
 
 ### PEM certificate ###
-src/main/resources/ftps/certs
+/src/main/resources/ftps/certs/client.key
+/src/main/resources/ftps/certs/domain.crt
+/src/main/resources/ftps/certs/domain.csr
+/src/main/resources/ftps/certs/domain.jks
+/src/main/resources/ftps/certs/domain.key
+/src/main/resources/ftps/certs/domain.pem
+/src/main/resources/ftps/certs/domain.pfx
+/src/main/resources/ftps/certs/rootCA.crt
+/src/main/resources/ftps/certs/rootCA.key
+/src/main/resources/ftps/certs/rootCA.srl
