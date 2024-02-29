@@ -7,12 +7,7 @@ spring:
     jpa:
         hibernate:
             ddl-auto: create
-    ssl:
-        bundle:
-            pem:
-                client:
-                    truststore:
-                        certificate: "classpath:ftp2/certs/domain.crt"
+
 ftp1:
     host: localhost
     user: demo
@@ -28,13 +23,16 @@ ftp2:
     host: acme.ftp
     user: demo
     pass: secret1234
-    port: 990
+    port: 9900
     client:
         mode: 2 #ACTIVE_LOCAL_DATA_CONNECTION_MODE = 0, PASSIVE_LOCAL_DATA_CONNECTION_MODE = 2
     remote:
         directory: "/"
     local:
         directory: "src/main/resources/ftp2/local"
+    keystore:
+        location: "src/main/resources/ftp2/certs/domain.jks"
+        password: "password"
 
 logging:
     level:

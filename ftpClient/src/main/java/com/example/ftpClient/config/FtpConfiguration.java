@@ -3,11 +3,8 @@ package com.example.ftpClient.config;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
-import org.apache.commons.net.ftp.FTPSClient;
-import org.apache.commons.net.util.TrustManagerUtils;
+import org.apache.commons.net.util.KeyManagerUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.ssl.SslBundle;
-import org.springframework.boot.ssl.SslBundles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.expression.common.LiteralExpression;
@@ -29,6 +26,7 @@ import org.springframework.messaging.MessagingException;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 @Configuration
 @Slf4j
@@ -62,6 +60,10 @@ public class FtpConfiguration {
     private String ftpRemoteDirectory2;
     @Value("${ftp2.local.directory}")
     private String ftpLocalDirectory2;
+    @Value("${ftp2.keystore.location}")
+    private String keystoreLocation;
+    @Value("${ftp2.keystore.password}")
+    private String keystorePassword;
 
     @Bean
     public SessionFactory<FTPFile> ftpSessionFactory() {
@@ -75,7 +77,7 @@ public class FtpConfiguration {
     }
 
     @Bean
-    public SessionFactory<FTPFile> ftpsSessionFactory(SslBundles sslBundles) {
+    public SessionFactory<FTPFile> ftpsSessionFactory() throws GeneralSecurityException, IOException {
         var defaultFtpsSessionFactory = new DefaultFtpsSessionFactory();
         defaultFtpsSessionFactory.setPassword(pass2);
         defaultFtpsSessionFactory.setUsername(user2);
@@ -84,6 +86,10 @@ public class FtpConfiguration {
         defaultFtpsSessionFactory.setClientMode(FTPClient.PASSIVE_LOCAL_DATA_CONNECTION_MODE);
         defaultFtpsSessionFactory.setProtocol("TLS");
         defaultFtpsSessionFactory.setImplicit(true);
+        defaultFtpsSessionFactory.setKeyManager(KeyManagerUtils.createClientKeyManager(
+                new File(keystoreLocation),
+                keystorePassword
+        ));
         return defaultFtpsSessionFactory;
     }
 
@@ -130,9 +136,9 @@ public class FtpConfiguration {
 
     @Bean
     @ServiceActivator(inputChannel = "toFtpsChannel")
-    public MessageHandler handlerFtps(SslBundles sslBundles) {
+    public MessageHandler handlerFtps() throws GeneralSecurityException, IOException {
         FtpOutboundGateway ftpOutboundGateway =
-                new FtpOutboundGateway(ftpsSessionFactory(sslBundles), "put", null);
+                new FtpOutboundGateway(ftpsSessionFactory(), "put", null);
         ftpOutboundGateway.setRemoteDirectoryExpression(new LiteralExpression(ftpRemoteDirectory2));
         return ftpOutboundGateway;
     }

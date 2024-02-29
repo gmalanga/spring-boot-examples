@@ -3,6 +3,7 @@ package com.example.ftpClient.config;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.util.KeyManagerUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,9 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Map;
 
 import static org.springframework.web.servlet.function.RouterFunctions.route;
@@ -38,8 +42,10 @@ public class GatewayConfiguration {
     DefaultFtpsSessionFactory gary(@Value("${ftp2.user}") String username,
                                   @Value("${ftp2.pass}") String pw,
                                   @Value("${ftp2.host}") String host,
-                                  @Value("${ftp2.port}") int port) {
-        return this.createFtpsSessionFactory(username, pw, host, port);
+                                  @Value("${ftp2.port}") int port,
+                                   @Value("${ftp2.keystore.location}") String keystoreLocation,
+                                   @Value("${ftp2.keystore.password}") String keystorePassword) throws GeneralSecurityException, IOException {
+        return this.createFtpsSessionFactory(username, pw, host, port, keystoreLocation, keystorePassword);
     }
 
     @Bean
@@ -61,7 +67,11 @@ public class GatewayConfiguration {
         return defaultFtpSessionFactory;
     }
 
-    private DefaultFtpsSessionFactory createFtpsSessionFactory(String username, String pw, String host, int port) {
+    private DefaultFtpsSessionFactory createFtpsSessionFactory(String username,
+                                                               String pw, String host,
+                                                               int port,
+                                                               String keystoreLocation,
+                                                               String keystorePassword) throws GeneralSecurityException, IOException {
         var defaultFtpsSessionFactory = new DefaultFtpsSessionFactory();
         defaultFtpsSessionFactory.setPassword(pw);
         defaultFtpsSessionFactory.setUsername(username);
@@ -70,6 +80,10 @@ public class GatewayConfiguration {
         defaultFtpsSessionFactory.setClientMode(FTPClient.PASSIVE_LOCAL_DATA_CONNECTION_MODE);
         defaultFtpsSessionFactory.setProtocol("TLS");
         defaultFtpsSessionFactory.setImplicit(true);
+        defaultFtpsSessionFactory.setKeyManager(KeyManagerUtils.createClientKeyManager(
+                new File(keystoreLocation),
+                keystorePassword
+        ));
         return defaultFtpsSessionFactory;
     }
 

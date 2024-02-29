@@ -39,7 +39,13 @@ Reference - https://mina.apache.org/ftpserver-project/embedding_ftpserver.html
 1. Run the FTPS server using the spring boot project located [here](../ftpsServer)
 2. Copy the certificates from the FTPS server to the ftp client and update the application.yaml with the certificate path and the FTP/FTPS server configurations
    ```shell
-   cp ../ftpsServer/src/main/resources/ftps/certs/* src/main/resources/ftp2/certs/
+   cp ../ftpsServer/src/main/resources/ftps/certs/domain.* src/main/resources/ftp2/certs
+   
+   # Check the application.yaml for the JKS location and password
+   ftp2:
+      keystore:
+        location: "src/main/resources/ftp2/certs/domain.jks"
+        password: "password"
    ```
 3. Start the client
    ```shell
@@ -48,15 +54,23 @@ Reference - https://mina.apache.org/ftpserver-project/embedding_ftpserver.html
 4. CURL commands to test the embedded FTPS server
    ```shell
    # list the remote directory
-   curl -v --cacert src/main/resources/ftp2/certs/domain.crt ftps://demo:secret1234@acme.ftp:990/
+   curl -v -tlsv1.2 --cacert src/main/resources/ftps/certs/domain.crt \
+      --cert src/main/resources/ftps/certs/domain.pem:password \
+      --key src/main/resources/ftps/certs/domain.key ftps://demo:secret1234@acme.ftp:9900/
    
    # upload a new file to the remote directory
-   curl -v --cacert src/main/resources/ftp2/certs/domain.crt -T README.md ftps://demo:secret1234@acme.ftp:990/
+   curl -v -tlsv1.2 --cacert src/main/resources/ftps/certs/domain.crt \
+      --cert src/main/resources/ftps/certs/domain.pem:password \
+      --key src/main/resources/ftps/certs/domain.key
+      -T README.md ftps://demo:secret1234@acme.ftp:9900/
    ```
 5. CURL commands to test the client
    ```shell
    # This will call the POST REST API to start FTP and FTPS request
    curl -H 'Content-Type: application/json' -s -XPOST http://localhost:8080/api/ftp/file -d '{"key1":"value1", "key2":"value2"}'
+   
+   # This will call the specific FTPS bean
+   curl -XPOST http://localhost:8080/put/gary
    
    # This will cal the GET REST API to list the files from the remote FTP/FTPS server
    curl -XGET http://localhost:8080/api/ftp/list 
