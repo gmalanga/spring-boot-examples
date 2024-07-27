@@ -1,9 +1,11 @@
-package com.example.kafka_replying;
+package com.example.kafkareplying;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.kafka.annotation.EnableKafka;
 
 @SpringBootApplication
+@EnableKafka
 public class KafkaReplyingApplication {
 
 	public static void main(String[] args) {
