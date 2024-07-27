@@ -1,14 +1,11 @@
 package com.example.kafkareplying.controller;
 
 import com.example.kafkareplying.model.MyNumber;
-import java.util.Arrays;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.internals.RecordHeader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
@@ -17,9 +14,9 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -27,7 +24,7 @@ import java.util.concurrent.ExecutionException;
 @RequiredArgsConstructor
 public class SumController {
 
-    ReplyingKafkaTemplate<String, MyNumber, MyNumber> kafkaTemplate;
+    private final ReplyingKafkaTemplate<String, MyNumber, MyNumber> kafkaTemplate;
 
     @Value("${spring.kafka.topic.request-topic}")
     String requestTopic;
@@ -45,19 +42,25 @@ public class SumController {
         producerRecord.headers().add(new RecordHeader(KafkaHeaders.REPLY_TOPIC, requestReplyTopic.getBytes()));
 
         // post in kafka topic
-        RequestReplyFuture<String, MyNumber, MyNumber> sendAndReceive = kafkaTemplate.sendAndReceive(record);
+        RequestReplyFuture<String, MyNumber, MyNumber> sendAndReceive = kafkaTemplate.sendAndReceive(producerRecord);
 
         // confirm if producer produced successfully
         SendResult<String, MyNumber> sendResult = sendAndReceive.getSendFuture().get();
 
         //print all headers
-        sendResult.getProducerRecord().headers().forEach(header -> log.debug("{}:{}", header.key(), Arrays.toString(header.value())));
+        sendResult.getProducerRecord().headers().forEach(header -> log.debug("{}:{}",
+                header.key(), convertByteToString(header.value())
+        ));
 
         // get consumer record
         ConsumerRecord<String, MyNumber> consumerRecord = sendAndReceive.get();
 
         // return consumer value
         return consumerRecord.value();
+    }
+
+    private String convertByteToString (byte[] bytes) {
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
 }
