@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = { "*" })
+@CrossOrigin(origins = {"*"})
 @RequestMapping(value = "/", produces = "application/json; charset=utf-8")
 class ProductController {
 
@@ -23,9 +23,9 @@ class ProductController {
         return repository.findAll();
     }
 
-    @GetMapping({ "/product/{id}" })
-    Product one(@PathVariable String id) throws Throwable {
-        return (Product) repository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+    @GetMapping({"/product/{id}"})
+    Product one(@PathVariable String id) throws ProductNotFoundException {
+        return repository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
     }
 
 }

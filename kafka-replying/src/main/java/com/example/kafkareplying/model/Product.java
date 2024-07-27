@@ -14,7 +14,9 @@ public class Product {
     private String version;
     private String event;
 
-    Product() {}
+    Product() {
+    }
+
     public Product(String id, String name, String type, String version, String event) {
         this.id = id;
         this.name = name;
