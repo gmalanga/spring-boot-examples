@@ -31,7 +31,7 @@ ftp2:
     local:
         directory: "src/main/resources/ftp2/local"
     keystore:
-        location: "src/main/resources/ftp2/certs/domain.jks"
+        location: "src/main/resources/ftp2/certs/domain.p12"
         password: "password"
 
 logging:

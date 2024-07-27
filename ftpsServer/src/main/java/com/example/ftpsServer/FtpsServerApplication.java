@@ -73,7 +73,7 @@ public class FtpsServerApplication {
 
 		// define SSL configuration
 		SslConfigurationFactory ssl = new SslConfigurationFactory();
-		ssl.setKeystoreFile(new File("src/main/resources/ftps/certs/domain.jks"));
+		ssl.setKeystoreFile(new File("src/main/resources/ftps/certs/domain.p12"));
 		ssl.setKeystorePassword("password");
 		ssl.setClientAuthentication(String.valueOf(ClientAuth.NEED)); // to enforce client TLS auth
 

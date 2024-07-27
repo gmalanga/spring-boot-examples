@@ -26,8 +26,9 @@ Spring boot project with an embedded FTPS server using Apache Mina project - htt
     openssl rsa -in domain.key -out client.key
     # Convert PEM to PKCS12
     openssl pkcs12 -inkey domain.key -in domain.crt -export -out domain.pfx
-    # Generate the JKS file for the server
-    keytool -importkeystore -srckeystore domain.pfx -srcstoretype pkcs12 -srcalias 1 -srcstorepass password -destkeystore domain.jks -deststoretype jks -deststorepass password -destalias myalias
+    # Generate the PKCS12 file for the server
+    keytool -importkeystore -srckeystore domain.pfx -srcstoretype pkcs12 -srcalias 1 \
+        -srcstorepass password -destkeystore domain.p12 -deststoretype PKCS12 -deststorepass password -destalias myalias
 
     ```
 2. Update your /etc/hosts file to include the name of your server "acme.ftp"
@@ -49,6 +50,7 @@ Spring boot project with an embedded FTPS server using Apache Mina project - htt
    curl -v -tlsv1.2 --cacert src/main/resources/ftps/certs/domain.crt \
       --cert src/main/resources/ftps/certs/domain.pem \
       --key src/main/resources/ftps/certs/client.key ftps://demo:secret1234@acme.ftp:9900/
+   
    # alternative option with password
    curl -v -tlsv1.2 --cacert src/main/resources/ftps/certs/domain.crt \
       --cert src/main/resources/ftps/certs/domain.pem:password \
@@ -60,5 +62,14 @@ Spring boot project with an embedded FTPS server using Apache Mina project - htt
       --key src/main/resources/ftps/certs/client.key \
       -T README.md ftps://demo:secret1234@acme.ftp:9900/
    ```
+
+### FTP SSL explicit tests
+
+```shell
+   # list the remote directory
+   curl -v -tlsv1.2 --ssl --cacert src/main/resources/ftps/certs/domain.crt \
+      --cert src/main/resources/ftps/certs/domain.pem \
+      --key src/main/resources/ftps/certs/client.key ftp://demo:secret1234@acme.ftp:9900/
+```
 
 
