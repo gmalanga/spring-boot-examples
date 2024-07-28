@@ -39,12 +39,14 @@ docker-compose up
 
 ## Usage
 
-### 1 - Pact tests
+### Pact tests - https://github.com/pactflow/example-consumer-java-kafka/blob/master/README.md
 
+- Producing test events into the product topic: make test-events
+- Retrieve latest products: curl localhost:8080/products
 - Retrieve latest products: http://localhost:8080/products
 - Retrieve specific product: http://localhost:8080/product/{id}
 
-### 2 - Spring ReplyingKafkaTemplate
+### Spring ReplyingKafkaTemplate
 
 - Start the application with gradle 
 ```shell
