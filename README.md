@@ -2,6 +2,16 @@
 
 A collection of Spring Boot projects.
 
-## Postgresql demo app
+## ftpClient
 
-Spring boot project to show how to split read and write operations with PostgreSQL DB. 
+## ftpsServer
+
+## kafka-replying 
+Synchronous Kafka: Using Spring Request-Reply
+
+## kafka-streams
+
+## postgresqlDemoApp
+
+## springKafkaTopicsJoin
+
