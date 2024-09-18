@@ -83,7 +83,8 @@ public class KafkaConfiguration {
 
     @Bean
     public ReplyingKafkaTemplate<String, MyNumber, MyNumber> replyKafkaTemplate(ProducerFactory<String, MyNumber> pf,
-                                                                                KafkaMessageListenerContainer<String, MyNumber> container) {
+                                                                                KafkaMessageListenerContainer<String,
+                                                                                MyNumber> container) {
         return new ReplyingKafkaTemplate<>(pf, container);
     }
 

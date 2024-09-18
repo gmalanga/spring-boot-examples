@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutionException;
 @RequiredArgsConstructor
 public class SumController {
 
-    private final ReplyingKafkaTemplate<String, MyNumber, MyNumber> kafkaTemplate;
+    private final ReplyingKafkaTemplate<String, MyNumber, MyNumber> replyingKafkaTemplate;
 
     @Value("${spring.kafka.topic.request-topic}")
     String requestTopic;
@@ -42,7 +42,7 @@ public class SumController {
         producerRecord.headers().add(new RecordHeader(KafkaHeaders.REPLY_TOPIC, requestReplyTopic.getBytes()));
 
         // post in kafka topic
-        RequestReplyFuture<String, MyNumber, MyNumber> sendAndReceive = kafkaTemplate.sendAndReceive(producerRecord);
+        RequestReplyFuture<String, MyNumber, MyNumber> sendAndReceive = replyingKafkaTemplate.sendAndReceive(producerRecord);
 
         // confirm if producer produced successfully
         SendResult<String, MyNumber> sendResult = sendAndReceive.getSendFuture().get();
