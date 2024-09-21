@@ -29,10 +29,8 @@ public class WordCountRestService {
         final KafkaStreams kafkaStreams = factoryBean.getKafkaStreams();
 
         log.debug("KafkaStreams status = {}", kafkaStreams.state().toString());
-        final ReadOnlyKeyValueStore<String, Long> counts = kafkaStreams
-                .store(
-                        StoreQueryParameters
-                                .fromNameAndType("counts", QueryableStoreTypes.keyValueStore()));
+        final ReadOnlyKeyValueStore<String, Long> counts = kafkaStreams.store(
+                StoreQueryParameters.fromNameAndType("counts", QueryableStoreTypes.keyValueStore()));
         return counts.get(word);
     }
 }
