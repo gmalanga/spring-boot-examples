@@ -17,7 +17,7 @@ public class LoadDatabase {
             log.info("Preloading {}", repository.save(
                     new Product("1", "Burger", "Aussie with avocade, egg, bacon and beetroot", "v1", "CREATED")));
             log.info("Preloading {}", repository.save(
-                    new Product("2", "Chips", "Sweet potato fries", "v1", "UPDATED")));
+                    new Product("2", "Chips", "Sweet potato fries", "v1", "CREATED")));
         };
     }
 }

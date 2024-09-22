@@ -41,7 +41,7 @@ docker-compose up
 
 ### Pact tests - https://github.com/pactflow/example-consumer-java-kafka/blob/master/README.md
 
-#### API usage
+#### APIs usage - http://localhost:8080/swagger-ui/index.html
 
 - Retrieve latest products: 
     ```shell
@@ -51,7 +51,9 @@ docker-compose up
 - Retrieve product by id: http://localhost:8080/product/{id}
 - Insert a new product:
 ```shell
-curl -H 'Content-Type: application/json' -s -XPOST http://localhost:8080/product -d '{"id":"3", "name":"Burger", "type":"Aussie with avocade, egg, bacon and beetroot", "version":"v2", "event":"UPDATED"}'
+curl -H 'Content-Type: application/json' -s -XPOST http://localhost:8080/product -d '{"id":"3", "name":"Burger", "type":"Aussie with egg, bacon and beetroot", "version":"v2", "event":"UPDATED"}'
+
+curl -H 'Content-Type: application/json' -s -XPOST http://localhost:8080/product -d '{"id":"4", "name":"Chips", "type":"Sweet potato fries with bacon", "version":"v2", "event":"UPDATED"}'
 ```
 
 ### Spring ReplyingKafkaTemplate

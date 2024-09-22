@@ -5,7 +5,6 @@ import com.example.kafkareplying.kafka.producer.KafkaProducer;
 import com.example.kafkareplying.model.Product;
 import com.example.kafkareplying.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,8 +31,15 @@ public class ProductController {
 
     @PostMapping("/product")
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@NotNull @RequestBody final Product product) {
-        kafkaProducer.send(product);
+    public void create(@RequestBody final Product product) {
+        kafkaProducer.sendTwo(product);
+    }
+
+    @DeleteMapping("/product/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public String delete(@PathVariable String id) {
+        repository.deleteById(id);
+        return id;
     }
 
 }
