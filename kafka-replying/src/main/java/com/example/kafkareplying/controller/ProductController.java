@@ -1,9 +1,12 @@
 package com.example.kafkareplying.controller;
 
 import com.example.kafkareplying.exception.ProductNotFoundException;
+import com.example.kafkareplying.kafka.producer.KafkaProducer;
 import com.example.kafkareplying.model.Product;
 import com.example.kafkareplying.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.antlr.v4.runtime.misc.NotNull;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +18,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductRepository repository;
+    private final KafkaProducer kafkaProducer;
 
     @GetMapping("/products")
     List<Product> all() {
@@ -24,6 +28,12 @@ public class ProductController {
     @GetMapping({"/product/{id}"})
     Product one(@PathVariable String id) throws ProductNotFoundException {
         return repository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+    }
+
+    @PostMapping("/product")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void create(@NotNull @RequestBody final Product product) {
+        kafkaProducer.send(product);
     }
 
 }

@@ -9,7 +9,7 @@ import au.com.dius.pact.core.model.PactSpecVersion;
 import au.com.dius.pact.core.model.annotations.Pact;
 import au.com.dius.pact.core.model.messaging.Message;
 import au.com.dius.pact.core.model.messaging.MessagePact;
-import com.example.kafkareplying.listener.ProductEventListener;
+import com.example.kafkareplying.kafka.listener.ProductEventListener;
 import com.example.kafkareplying.model.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

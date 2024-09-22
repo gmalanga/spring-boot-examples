@@ -1,4 +1,4 @@
-package com.example.kafkareplying.listener;
+package com.example.kafkareplying.kafka.listener;
 
 import com.example.kafkareplying.model.Product;
 import com.example.kafkareplying.repository.ProductRepository;
@@ -17,7 +17,6 @@ public class ProductEventListener {
     @KafkaListener(topics = "products")
     public void listen(Product product) throws Exception {
         log.info("received product event: {}", product);
-
         repository.save(product);
     }
 }

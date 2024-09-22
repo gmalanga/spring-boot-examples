@@ -72,6 +72,16 @@ public class KafkaConfiguration {
     }
 
     @Bean
+    public ProducerFactory<String, Product> producerFactoryProduct() {
+        return new DefaultKafkaProducerFactory<>(producerConfigs());
+    }
+
+    @Bean
+    public KafkaTemplate<String, Product> kafkaTemplateProduct() {
+        return new KafkaTemplate<>(producerFactoryProduct());
+    }
+
+    @Bean
     public ProducerFactory<String, MyNumber> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }

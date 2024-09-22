@@ -41,10 +41,18 @@ docker-compose up
 
 ### Pact tests - https://github.com/pactflow/example-consumer-java-kafka/blob/master/README.md
 
-- Producing test events into the product topic: make test-events
-- Retrieve latest products: curl localhost:8080/products
+#### API usage
+
+- Retrieve latest products: 
+    ```shell
+    curl localhost:8080/products
+    ```
 - Retrieve latest products: http://localhost:8080/products
-- Retrieve specific product: http://localhost:8080/product/{id}
+- Retrieve product by id: http://localhost:8080/product/{id}
+- Insert a new product:
+```shell
+curl -H 'Content-Type: application/json' -s -XPOST http://localhost:8080/product -d '{"id":"3", "name":"Burger", "type":"Aussie with avocade, egg, bacon and beetroot", "version":"v2", "event":"UPDATED"}'
+```
 
 ### Spring ReplyingKafkaTemplate
 
